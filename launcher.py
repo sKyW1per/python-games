@@ -1,39 +1,41 @@
 import tkinter as tk
-from tkinter import ttk  # for some buttons?
+from tkinter import ttk  # for some buttons
+# from PIL import Image, ImageTk
 
 
-def center_screen(window, w_width, w_height):
-    """center a tkinter-window"""
-    # get the screen dimension
-    screen_width = window.winfo_screenwidth()
-    screen_height = window.winfo_screenheight()
-
-    # find the center point
-    center_x = int(screen_width / 2 - w_width / 2)
-    center_y = int(screen_height / 2 - w_height / 2)
-
-    # set the position of the window to the center of the screen
-    window.geometry(f'{w_width}x{w_height}+{center_x}+{center_y}')
-
-
-class Launcher:
+class Launcher(tk.Tk):
     def __init__(self):
-        self.width = 500  # width and height of the window
-        self.height = 400
-        self.window = tk.Tk()  # setting up the window
-        self.window.title("game launcher")  # new title
-        self.window.resizable(False, False)  # make sure that the window isn't resizable
-        center_screen(self.window, self.width, self.height)
+        super().__init__()
 
     def start(self):
-        self.window.mainloop()  # start the window
+        self.app()
 
     def stop(self):
-        self.window.quit()  # doesn't work: https://stackoverflow.com/questions/35792365/how-to-destroy-this-tkinter-window?adlt=strict&toWww=1&redig=D4EDD692FE0749C5BCB2029985553E02
+        self.App.quit()  # close application
+
+    def app(self):  # init tk.Tk
+        self.width = 500  # width and height of the window
+        self.height = 394
+
+        self.title("game launcher")  # new title
+        self.resizable(False, False)  # make sure that the window isn't resizable
+        self.geometry(f"{self.width}x{self.height}")  # set width and height of the window
+
+        self.columnconfigure(0, weight=1)  # configure the columns
+        self.columnconfigure(1, weight=1)
+        self.columnconfigure(2, weight=1)
+
+        self.makeButtons()
+
+        self.mainloop()  # start the application
+
+    def onclick(self, button):
+        print(button)
+
+    def makeButtons(self):
+        for i in range(9):
+            games = ["snake", "pong", "3", "4", "5", "6", "7", "8", "9"]  # names of the games
+            button = f'button{i} = ttk.Button(self, text="{games[i]}") \nbutton{i}.grid(column={i % 3}, row={int(i / 3)}, sticky=tk.EW, ipady=53)'  # make every loop a string. if you don't want to type each button by yourself...
+            exec(button)  # execute the stings
 
 
-#test script
-if __name__ == "__main__":
-    lc = Launcher()
-    lc.start()
-    lc.stop()
